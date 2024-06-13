@@ -1,0 +1,224 @@
+\doxysection{main.\+c File Reference}
+\hypertarget{main_8c}{}\label{main_8c}\index{main.c@{main.c}}
+
+
+Comunicación Bluetooth con HC-\/06.  
+
+
+{\ttfamily \#include "{}pico/stdlib.\+h"{}}\newline
+{\ttfamily \#include "{}pico/util/datetime.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/i2c.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/dma.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/uart.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/irq.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/rtc.\+h"{}}\newline
+{\ttfamily \#include "{}hardware/adc.\+h"{}}\newline
+{\ttfamily \#include "{}hc06.\+h"{}}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8c_ab3089058ef3c2af9caabf22cc49640da}\label{main_8c_ab3089058ef3c2af9caabf22cc49640da} 
+\#define {\bfseries ECG\+\_\+\+PIN}~26
+\item 
+\Hypertarget{main_8c_a62f3cf859c1f6587fa00f354b34bc0bc}\label{main_8c_a62f3cf859c1f6587fa00f354b34bc0bc} 
+\#define {\bfseries LO\+\_\+\+PLUS\+\_\+\+PIN}~27
+\item 
+\Hypertarget{main_8c_a043901bdebd8d5c2ab3f8057b4fd7cb8}\label{main_8c_a043901bdebd8d5c2ab3f8057b4fd7cb8} 
+\#define {\bfseries LO\+\_\+\+MINUS\+\_\+\+PIN}~28
+\item 
+\Hypertarget{main_8c_ad9ecf80e1eac083d16ec47f9d3aeb39f}\label{main_8c_ad9ecf80e1eac083d16ec47f9d3aeb39f} 
+\#define {\bfseries I2\+C\+\_\+\+PORT}~i2c1
+\item 
+\Hypertarget{main_8c_ac4b721096cd1b12d85f3f0e135b272be}\label{main_8c_ac4b721096cd1b12d85f3f0e135b272be} 
+\#define {\bfseries MAX30102\+\_\+\+ADDR}~0x57
+\item 
+\Hypertarget{main_8c_a18aefd12ad84d4c33dc97923cb821e47}\label{main_8c_a18aefd12ad84d4c33dc97923cb821e47} 
+\#define {\bfseries I2\+C\+\_\+\+SDA}~2
+\item 
+\Hypertarget{main_8c_a212ca328a6409c98f8c3dfbbe1ba561d}\label{main_8c_a212ca328a6409c98f8c3dfbbe1ba561d} 
+\#define {\bfseries I2\+C\+\_\+\+SCL}~3
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{main_8c_a1321c224fffe9eb5779a23affd055968}{repeating\+\_\+timer\+\_\+callback}} (struct repeating\+\_\+timer \texorpdfstring{$\ast$}{*}t)
+\begin{DoxyCompactList}\small\item\em Callback del temporizador repetitivo. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{main_8c_ad58832ddd3ce04abfccc03cdd430377c}{repeating\+\_\+ecg\+\_\+mesure}} (struct repeating\+\_\+timer \texorpdfstring{$\ast$}{*}t)
+\begin{DoxyCompactList}\small\item\em Callback del temporizador repetitivo para medir el ECG. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_a2d55adaff96e84bf99460f7c9d24f7a4}\label{main_8c_a2d55adaff96e84bf99460f7c9d24f7a4} 
+void {\bfseries init\+\_\+adc} ()
+\begin{DoxyCompactList}\small\item\em Inicializa el ADC. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_a2ffbeae6c737f0ed50e4614eec56ef76}\label{main_8c_a2ffbeae6c737f0ed50e4614eec56ef76} 
+void {\bfseries init\+\_\+gpio} ()
+\begin{DoxyCompactList}\small\item\em Inicializa los GPIOs. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_ac0e6a2fe6b9df696714a70059e06fa74}\label{main_8c_ac0e6a2fe6b9df696714a70059e06fa74} 
+void {\bfseries my\+\_\+i2c\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Inicializa el i2c para el medidor de oxigeno. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_a4a5cb63bfdad2568e4edbf63328c1ad0}\label{main_8c_a4a5cb63bfdad2568e4edbf63328c1ad0} 
+void {\bfseries max30102\+\_\+init} ()
+\begin{DoxyCompactList}\small\item\em Inicializa el i2c para el medidor de oxigeno. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a732660022d2669a89b557a585033180d}{max30102\+\_\+read\+\_\+fifo}} (uint32\+\_\+t \texorpdfstring{$\ast$}{*}red\+\_\+led, uint32\+\_\+t \texorpdfstring{$\ast$}{*}ir\+\_\+led)
+\begin{DoxyCompactList}\small\item\em Lectura de los registros del modulo para obtener los datos de la oxigenación en sangre. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{main_8c_abfc33477d39ba94e9c305a8e2e97a32b}{calculate\+\_\+spo2}} (uint32\+\_\+t red\+\_\+led, uint32\+\_\+t ir\+\_\+led)
+\begin{DoxyCompactList}\small\item\em Inicializa el i2c para el medidor de oxigeno. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_a781705b7ef0ba69810fbf158f2e1ee63}\label{main_8c_a781705b7ef0ba69810fbf158f2e1ee63} 
+void {\bfseries ecg\+\_\+sense} ()
+\begin{DoxyCompactList}\small\item\em Realiza la medición del ECG. \end{DoxyCompactList}\item 
+\Hypertarget{main_8c_aaebc3a9a98015563f10cf21f63447604}\label{main_8c_aaebc3a9a98015563f10cf21f63447604} 
+void {\bfseries ecg\+\_\+spo} ()
+\begin{DoxyCompactList}\small\item\em Realiza la medición de la oxigenación en sangre. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\begin{DoxyCompactList}\small\item\em Función principal. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{main_8c_abb0c9478d3002a38a1c8ec5f1df5bc81}\label{main_8c_abb0c9478d3002a38a1c8ec5f1df5bc81} 
+char {\bfseries datetime\+\_\+buf} \mbox{[}256\mbox{]}
+\item 
+\Hypertarget{main_8c_a119cac4c620a5fdef7548feee13295f7}\label{main_8c_a119cac4c620a5fdef7548feee13295f7} 
+char \texorpdfstring{$\ast$}{*} {\bfseries datetime\+\_\+str} = \&datetime\+\_\+buf\mbox{[}0\mbox{]}
+\item 
+\Hypertarget{main_8c_a61f654d0d4dfd198fc1a3df0026d0a53}\label{main_8c_a61f654d0d4dfd198fc1a3df0026d0a53} 
+char {\bfseries message} \mbox{[}24\mbox{]}
+\item 
+\Hypertarget{main_8c_a7ac59e6a0280ff006a08535b8c570628}\label{main_8c_a7ac59e6a0280ff006a08535b8c570628} 
+volatile bool {\bfseries ban\+\_\+ecg} = false
+\item 
+\Hypertarget{main_8c_a0d3fd5e2276c819866c9f882dabf7bf4}\label{main_8c_a0d3fd5e2276c819866c9f882dabf7bf4} 
+volatile bool {\bfseries ban\+\_\+spo} = false
+\item 
+\Hypertarget{main_8c_a3e1c2bb525260271ce5dbd2d6026ff8d}\label{main_8c_a3e1c2bb525260271ce5dbd2d6026ff8d} 
+volatile bool {\bfseries ban\+\_\+clean} = false
+\item 
+datetime\+\_\+t \mbox{\hyperlink{main_8c_a5a67e31d1646d1e858c798ec731925dd}{real\+\_\+t}}
+\begin{DoxyCompactList}\small\item\em Estructura de tiempo para actualizar el RTC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Comunicación Bluetooth con HC-\/06. 
+
+Este programa mide el nivel de ruido utilizando un micrófono analógico conectado a un Raspberry Pi Pico, guarda los datos en la memoria flash y permite la comunicación UART para la recuperación de datos. \begin{DoxyAuthor}{Authors}
+
+\begin{DoxyItemize}
+\item Juan Guillermo Quevedo
+\item Luis Fernando Torres
+\item Juan Manuel Correa 
+\end{DoxyItemize}
+\end{DoxyAuthor}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{main_8c_abfc33477d39ba94e9c305a8e2e97a32b}\label{main_8c_abfc33477d39ba94e9c305a8e2e97a32b} 
+\index{main.c@{main.c}!calculate\_spo2@{calculate\_spo2}}
+\index{calculate\_spo2@{calculate\_spo2}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{calculate\_spo2()}{calculate\_spo2()}}
+{\footnotesize\ttfamily float calculate\+\_\+spo2 (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{red\+\_\+led,  }\item[{uint32\+\_\+t}]{ir\+\_\+led }\end{DoxyParamCaption})}
+
+
+
+Inicializa el i2c para el medidor de oxigeno. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em red\+\_\+led} & Puntero a la variable de la intensidad medida del receptor rojo. \\
+\hline
+{\em ir\+\_\+led} & Puntero a la variable de la intensidad medida del receptor infrarojo. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+variable flotante con el porcentaje de oxigenación en sangre 
+\end{DoxyReturn}
+\Hypertarget{main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Función principal. 
+
+\begin{DoxyReturn}{Returns}
+0 en caso de éxito 
+\end{DoxyReturn}
+\Hypertarget{main_8c_a732660022d2669a89b557a585033180d}\label{main_8c_a732660022d2669a89b557a585033180d} 
+\index{main.c@{main.c}!max30102\_read\_fifo@{max30102\_read\_fifo}}
+\index{max30102\_read\_fifo@{max30102\_read\_fifo}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{max30102\_read\_fifo()}{max30102\_read\_fifo()}}
+{\footnotesize\ttfamily void max30102\+\_\+read\+\_\+fifo (\begin{DoxyParamCaption}\item[{uint32\+\_\+t \texorpdfstring{$\ast$}{*}}]{red\+\_\+led,  }\item[{uint32\+\_\+t \texorpdfstring{$\ast$}{*}}]{ir\+\_\+led }\end{DoxyParamCaption})}
+
+
+
+Lectura de los registros del modulo para obtener los datos de la oxigenación en sangre. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em red\+\_\+led} & Puntero a la variable de la intensidad medida del receptor rojo. \\
+\hline
+{\em ir\+\_\+led} & Puntero a la variable de la intensidad medida del receptor infrarojo. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{main_8c_ad58832ddd3ce04abfccc03cdd430377c}\label{main_8c_ad58832ddd3ce04abfccc03cdd430377c} 
+\index{main.c@{main.c}!repeating\_ecg\_mesure@{repeating\_ecg\_mesure}}
+\index{repeating\_ecg\_mesure@{repeating\_ecg\_mesure}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{repeating\_ecg\_mesure()}{repeating\_ecg\_mesure()}}
+{\footnotesize\ttfamily bool repeating\+\_\+ecg\+\_\+mesure (\begin{DoxyParamCaption}\item[{struct repeating\+\_\+timer \texorpdfstring{$\ast$}{*}}]{t }\end{DoxyParamCaption})}
+
+
+
+Callback del temporizador repetitivo para medir el ECG. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & Puntero a la estructura del temporizador \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true para mantener el temporizador en ejecución 
+\end{DoxyReturn}
+\Hypertarget{main_8c_a1321c224fffe9eb5779a23affd055968}\label{main_8c_a1321c224fffe9eb5779a23affd055968} 
+\index{main.c@{main.c}!repeating\_timer\_callback@{repeating\_timer\_callback}}
+\index{repeating\_timer\_callback@{repeating\_timer\_callback}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{repeating\_timer\_callback()}{repeating\_timer\_callback()}}
+{\footnotesize\ttfamily bool repeating\+\_\+timer\+\_\+callback (\begin{DoxyParamCaption}\item[{struct repeating\+\_\+timer \texorpdfstring{$\ast$}{*}}]{t }\end{DoxyParamCaption})}
+
+
+
+Callback del temporizador repetitivo. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & Puntero a la estructura del temporizador \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true para mantener el temporizador en ejecución 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{main_8c_a5a67e31d1646d1e858c798ec731925dd}\label{main_8c_a5a67e31d1646d1e858c798ec731925dd} 
+\index{main.c@{main.c}!real\_t@{real\_t}}
+\index{real\_t@{real\_t}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{real\_t}{real\_t}}
+{\footnotesize\ttfamily datetime\+\_\+t real\+\_\+t}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ .year\ =\ 2024,}
+\DoxyCodeLine{\ \ \ \ .month\ =\ 6,}
+\DoxyCodeLine{\ \ \ \ .day\ =\ 13,}
+\DoxyCodeLine{\ \ \ \ .dotw\ =\ 4,\ }
+\DoxyCodeLine{\ \ \ \ .hour\ =\ 15,}
+\DoxyCodeLine{\ \ \ \ .min\ =\ 53,}
+\DoxyCodeLine{\ \ \ \ .sec\ =\ 0}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+Estructura de tiempo para actualizar el RTC. 
+

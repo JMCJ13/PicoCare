@@ -1,0 +1,114 @@
+\doxysection{hc06.\+c File Reference}
+\hypertarget{hc06_8c}{}\label{hc06_8c}\index{hc06.c@{hc06.c}}
+
+
+Implementación de las funciones para el manejo del modulo bluetooth HC-\/06.  
+
+
+{\ttfamily \#include "{}hc06.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{hc06_8c_a298eb9fdb7afffa31d62360b439a5f33}{setup\+\_\+hc06}} ()
+\begin{DoxyCompactList}\small\item\em Configura la UART para la comunicación con el GPS. \end{DoxyCompactList}\item 
+\Hypertarget{hc06_8c_ad7fec5b2b07b712822dc8182d1796c22}\label{hc06_8c_ad7fec5b2b07b712822dc8182d1796c22} 
+void {\bfseries on\+\_\+uart\+\_\+rx} ()
+\begin{DoxyCompactList}\small\item\em Handler de interrupción para UART. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{hc06_8c_a556c82ca2bb521fdd4fd765e5cceda92}{enviar\+\_\+datos}} (char \texorpdfstring{$\ast$}{*}message)
+\begin{DoxyCompactList}\small\item\em Envia los datos por UART al modulo HC-\/06. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{hc06_8c_a508945de6c4587d23006e329344b6f46}{read\+\_\+data\+\_\+flash}} ()
+\begin{DoxyCompactList}\small\item\em Lee datos de la memoria flash. \end{DoxyCompactList}\item 
+\Hypertarget{hc06_8c_a1a4d441cf8851d76302817ca624d248d}\label{hc06_8c_a1a4d441cf8851d76302817ca624d248d} 
+void {\bfseries clean\+\_\+data\+\_\+flash} ()
+\begin{DoxyCompactList}\small\item\em Borra los datos de la flash que ya fueron enviados por el modulo HC-\/06. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{hc06_8c_ae76b52eaaef103c2a87571edecdee5d7}{write\+\_\+to\+\_\+flash}} (const char \texorpdfstring{$\ast$}{*}data, size\+\_\+t length)
+\begin{DoxyCompactList}\small\item\em Escribe datos en la memoria flash. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{hc06_8c_ad5ba0b07a67d4839f681a6f159459c74}{get\+\_\+flash\+\_\+st}} ()
+\begin{DoxyCompactList}\small\item\em Retorna la bandera del status de la flahs. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{hc06_8c_a6c5ab48175e6a22e6da276db7ee9959e}\label{hc06_8c_a6c5ab48175e6a22e6da276db7ee9959e} 
+uint8\+\_\+t {\bfseries ind\+\_\+flash} = 0
+\item 
+\Hypertarget{hc06_8c_ac675636f0bd729fd7631e8fc57b9d4ea}\label{hc06_8c_ac675636f0bd729fd7631e8fc57b9d4ea} 
+uint32\+\_\+t {\bfseries maxsize} = 100\texorpdfstring{$\ast$}{*}(4\texorpdfstring{$\ast$}{*}FLASH\+\_\+\+PAGE\+\_\+\+SIZE)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementación de las funciones para el manejo del modulo bluetooth HC-\/06. 
+
+Este archivo contiene las declaraciones de funciones y las definiciones necesarias para inicializar, enviar los datos por UART al modulo HC-\/06 
+
+\doxysubsection{Function Documentation}
+\Hypertarget{hc06_8c_a556c82ca2bb521fdd4fd765e5cceda92}\label{hc06_8c_a556c82ca2bb521fdd4fd765e5cceda92} 
+\index{hc06.c@{hc06.c}!enviar\_datos@{enviar\_datos}}
+\index{enviar\_datos@{enviar\_datos}!hc06.c@{hc06.c}}
+\doxysubsubsection{\texorpdfstring{enviar\_datos()}{enviar\_datos()}}
+{\footnotesize\ttfamily void enviar\+\_\+datos (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{message }\end{DoxyParamCaption})}
+
+
+
+Envia los datos por UART al modulo HC-\/06. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nmea\+\_\+buffer} & Puntero a la cadena con el mensaje a enviar. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{hc06_8c_ad5ba0b07a67d4839f681a6f159459c74}\label{hc06_8c_ad5ba0b07a67d4839f681a6f159459c74} 
+\index{hc06.c@{hc06.c}!get\_flash\_st@{get\_flash\_st}}
+\index{get\_flash\_st@{get\_flash\_st}!hc06.c@{hc06.c}}
+\doxysubsubsection{\texorpdfstring{get\_flash\_st()}{get\_flash\_st()}}
+{\footnotesize\ttfamily uint8\+\_\+t get\+\_\+flash\+\_\+st (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Retorna la bandera del status de la flahs. 
+
+~\newline
+
+
+\begin{DoxyReturn}{Returns}
+0 no se la leido la flash, 1 la flash esta en proceso de lectura, 2 la flash ya fue leida. 
+\end{DoxyReturn}
+\Hypertarget{hc06_8c_a508945de6c4587d23006e329344b6f46}\label{hc06_8c_a508945de6c4587d23006e329344b6f46} 
+\index{hc06.c@{hc06.c}!read\_data\_flash@{read\_data\_flash}}
+\index{read\_data\_flash@{read\_data\_flash}!hc06.c@{hc06.c}}
+\doxysubsubsection{\texorpdfstring{read\_data\_flash()}{read\_data\_flash()}}
+{\footnotesize\ttfamily void read\+\_\+data\+\_\+flash (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Lee datos de la memoria flash. 
+
+Lee datos de la memoria flash y los envia al modulo HC-\/06. \Hypertarget{hc06_8c_a298eb9fdb7afffa31d62360b439a5f33}\label{hc06_8c_a298eb9fdb7afffa31d62360b439a5f33} 
+\index{hc06.c@{hc06.c}!setup\_hc06@{setup\_hc06}}
+\index{setup\_hc06@{setup\_hc06}!hc06.c@{hc06.c}}
+\doxysubsubsection{\texorpdfstring{setup\_hc06()}{setup\_hc06()}}
+{\footnotesize\ttfamily void setup\+\_\+hc06 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Configura la UART para la comunicación con el GPS. 
+
+Configura la UART para la comunicación con modulo HC-\/06.
+
+Inicializa la UART con los parámetros definidos para la comunicación con el módulo HC-\/06. \Hypertarget{hc06_8c_ae76b52eaaef103c2a87571edecdee5d7}\label{hc06_8c_ae76b52eaaef103c2a87571edecdee5d7} 
+\index{hc06.c@{hc06.c}!write\_to\_flash@{write\_to\_flash}}
+\index{write\_to\_flash@{write\_to\_flash}!hc06.c@{hc06.c}}
+\doxysubsubsection{\texorpdfstring{write\_to\_flash()}{write\_to\_flash()}}
+{\footnotesize\ttfamily void write\+\_\+to\+\_\+flash (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{data,  }\item[{size\+\_\+t}]{length }\end{DoxyParamCaption})}
+
+
+
+Escribe datos en la memoria flash. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & Puntero a los datos a escribir. \\
+\hline
+{\em length} & Longitud de los datos. \\
+\hline
+\end{DoxyParams}

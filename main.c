@@ -50,8 +50,8 @@ datetime_t real_t = {
     .month = 6,
     .day = 13,
     .dotw = 4, // 0 is Sunday, so 4 is Thursday
-    .hour = 14,
-    .min = 45,
+    .hour = 15,
+    .min = 53,
     .sec = 0
 };
 
@@ -150,6 +150,11 @@ void max30102_init() {
     i2c_write_blocking(I2C_PORT, MAX30102_ADDR, buffer, 2, false);
 }
 
+/**
+ * @brief Lectura de los registros del modulo para obtener los datos de la oxigenación en sangre
+ * @param red_led Puntero a la variable de la intensidad medida del receptor rojo.
+ * @param ir_led Puntero a la variable de la intensidad medida del receptor infrarojo.
+ */
 void max30102_read_fifo(uint32_t *red_led, uint32_t *ir_led) {
     uint8_t buffer[6];
     uint8_t reg = 0x07;  // FIFO_DATA register
@@ -160,7 +165,12 @@ void max30102_read_fifo(uint32_t *red_led, uint32_t *ir_led) {
     *red_led = ((buffer[0] << 16) | (buffer[1] << 8) | buffer[2]) & 0x03FFFF;
     *ir_led = ((buffer[3] << 16) | (buffer[4] << 8) | buffer[5]) & 0x03FFFF;
 }
-
+/**
+ * @brief Inicializa el i2c para el medidor de oxigeno
+ * @param red_led Puntero a la variable de la intensidad medida del receptor rojo.
+ * @param ir_led Puntero a la variable de la intensidad medida del receptor infrarojo.
+ * @return variable flotante con el porcentaje de oxigenación en sangre
+ */
 float calculate_spo2(uint32_t red_led, uint32_t ir_led) {
     // Constantes empíricas ajustadas según datos de calibración
     const float A = 110.0;
@@ -208,6 +218,9 @@ void ecg_sense(){
     }
 }
 
+/**
+ * @brief Realiza la medición de la oxigenación en sangre
+ */
 void ecg_spo(){
     char buffer[26];
     uint32_t red_led, ir_led;

@@ -1,13 +1,13 @@
 /**
  * @file main.c
  * @brief Comunicación Bluetooth con HC-06
- * @author Juan Guillermo Quevedo
- * @author Luis Fernando Torres
- * @author Juan Manuel Correa
- * 
- * Este programa mide el nivel de ruido utilizando un micrófono analógico conectado a un Raspberry Pi Pico,
- * guarda los datos en la memoria flash y permite la comunicación UART para la recuperación de datos.
+ * @details Este programa mide el nivel de ruido utilizando un micrófono analógico conectado a un Raspberry Pi Pico, guarda los datos en la memoria flash y permite la comunicación UART para la recuperación de datos.
+ * @authors 
+ *  - Juan Guillermo Quevedo
+ *  - Luis Fernando Torres
+ *  - Juan Manuel Correa
  */
+
 #include "pico/stdlib.h"
 #include "pico/util/datetime.h"
 #include "hardware/dma.h"
@@ -31,7 +31,9 @@ char message[24];
 volatile bool ban_ecg = false;
 volatile bool ban_clean = false;
 
-// Estructura de tiempo para actualizar el RTC
+/**
+ * @brief Estructura de tiempo para actualizar el RTC
+ */
 datetime_t real_t = {
     .year = 2024,
     .month = 6,
@@ -42,6 +44,11 @@ datetime_t real_t = {
     .sec = 0
 };
 
+/**
+ * @brief Callback del temporizador repetitivo
+ * @param t Puntero a la estructura del temporizador
+ * @return true para mantener el temporizador en ejecución
+ */
 bool repeating_timer_callback(struct repeating_timer *t) {
     if (get_flash_st()==2){
         ban_clean = true;
@@ -50,17 +57,28 @@ bool repeating_timer_callback(struct repeating_timer *t) {
     return true; // Mantener el temporizador en ejecución
 }
 
+/**
+ * @brief Callback del temporizador repetitivo para medir el ECG
+ * @param t Puntero a la estructura del temporizador
+ * @return true para mantener el temporizador en ejecución
+ */
 bool repeating_ecg_mesure(struct repeating_timer *t) {
     ban_ecg = true;
     return true; // Mantener el temporizador en ejecución
 }
 
+/**
+ * @brief Inicializa el ADC
+ */
 void init_adc() {
     adc_init();
     adc_gpio_init(ECG_PIN);
     adc_select_input(0); // ADC input 0 corresponds to GPIO26
 }
 
+/**
+ * @brief Inicializa los GPIOs
+ */
 void init_gpio() {
     gpio_init(LO_PLUS_PIN);
     gpio_set_dir(LO_PLUS_PIN, GPIO_IN);
@@ -71,6 +89,9 @@ void init_gpio() {
     gpio_pull_up(LO_MINUS_PIN);
 }
 
+/**
+ * @brief Realiza la medición del ECG
+ */
 void ecg_sense(){
     char buffer[26];
     bool lo_plus = !gpio_get(LO_PLUS_PIN); // Read LO+ pin status
@@ -85,13 +106,17 @@ void ecg_sense(){
     }
 }
 
+/**
+ * @brief Función principal
+ * @return 0 en caso de éxito
+ */
 int main() {
     stdio_init_all();
     sleep_ms(500);
 
     setup_hc06();
 
-    //inicializacion del RTC coon el tiempo actual
+    // Inicialización del RTC con el tiempo actual
     rtc_init();
     rtc_set_datetime(&real_t);
     sleep_us(64);
@@ -114,12 +139,6 @@ int main() {
     add_repeating_timer_ms(200, repeating_ecg_mesure, NULL, &timer_1);
 
     while (1) {
-        /*if (ban_env) {
-            rtc_get_datetime(&real_t);
-            snprintf(message, sizeof(message), "\r%d,%d,%d,%d\n", real_t.dotw, real_t.hour, real_t.min, real_t.sec);
-            printf("\r%s\n", message);
-            ban_env = false;
-        }*/
         if (ban_clean){
             clean_data_flash();
             ban_clean = false;
@@ -131,4 +150,3 @@ int main() {
     }
     return 0;
 }
-

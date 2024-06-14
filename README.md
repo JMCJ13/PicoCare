@@ -13,14 +13,16 @@ El diagrama de flujo del funcionamiento del sistema es:
 
 
 
-## Used By
+## Archivos
 
 Este proyecto cuanta con el driver de cada sensor por a parte en lenguaje tipo cada
 - MAX30102 : 
 - módulo HC06 : hco6.c
+- Inegración: main.c
+- Doxugen: Se encuentra en la carpeta Doc
 
 
-## Authors
+## Autores
 
 - [@luistorrset](https://github.com/luistorrest)
 - [@JMCJ13 ](https://github.com/JMCJ13)
